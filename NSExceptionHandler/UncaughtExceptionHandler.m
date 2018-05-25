@@ -62,6 +62,8 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
     
     
     
+    
+    // Runloop会在这里一直运行，当dimissed设置YES后，下面的代码才会运行（但dimissed修改为YES这一操作并没有生效！）
     CFRunLoopRef runLoop = CFRunLoopGetCurrent();
     CFArrayRef allModes = CFRunLoopCopyAllModes(runLoop);
 
@@ -74,7 +76,7 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
     
     
     
-
+    // 当dimissed设置为YES，上面的Runloop才会停止，代码走到这里（但dimissed的修改并没有生效？？？为什么呢）
     CFRelease(allModes);
     NSSetUncaughtExceptionHandler(NULL);
     signal(SIGABRT,SIG_DFL);
@@ -111,6 +113,7 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
     [alert setValue:alertControllerMessageStr forKey:@"attributedMessage"];
 
     __weak typeof(self) _ws = self;
+    /******************************** 注意，dimissed用于标志App是否让崩溃闪退，但实际上当设置为YES后并没有生效，所以这里注释掉了 ********************************/
 //    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"退出App" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
 //        dispatch_async(dispatch_get_main_queue(), ^{
 //            _ws.dimissed = @(YES);
